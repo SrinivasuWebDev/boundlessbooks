@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import {
-  BrowserRouter, Routes, Route
+  createBrowserRouter,
+  RouterProvider,
 } from 'react-router-dom';
 import { AppProvider } from './context.';
 import './index.css';
@@ -10,18 +11,26 @@ import About from "./pages/About/About";
 import BookList from "./components/BookList/BookList";
 import BookDetails from "./components/BookDetails/BookDetails";
 
+// Define your routes
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+    children: [
+      { path: "about", element: <About /> },
+      { path: "book", element: <BookList /> },
+      { path: "book/:id", element: <BookDetails /> }
+    ]
+  }
+], {
+  future: {
+    v7_relativeSplatPath: true
+  }
+});
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AppProvider>
-    <BrowserRouter>
-      <Routes>
-        <Route path = "/" element = {<Home />}>
-          <Route path = "about" element = {<About />} />
-          <Route path = "book" element = {<BookList />} />
-          <Route path = "/book/:id" element = {<BookDetails />} />
-        </Route>
-      </Routes>
-    </BrowserRouter>
+    <RouterProvider router={router} />
   </AppProvider>
 );
-
